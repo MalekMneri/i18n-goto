@@ -14,10 +14,20 @@
   "contributes": {
     "commands": [
       {
-        "command": "i18n-goto.helloWorld",
-        "title": "Hello World"
+        "command": "i18n-goto.configLocalesFolder",
+        "title": "Configure locales folder"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "I18n Goto",
+      "properties": {
+        "i18n-goto.localesFile": {
+          "type": "string",
+          "default": "src/locales",
+          "description": "Path to locales Folder"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "pnpm run package",

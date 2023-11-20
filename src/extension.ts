@@ -2,8 +2,43 @@ import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
-    "i18n-goto.helloWorld",
-    () => {}
+    "i18n-goto.configLocalesFolder",
+     () => {
+      const currentRootFolder = getCurrentRootPath();
+      if (!currentRootFolder) {
+        return;
+      }
+
+       vscode.window
+        .showOpenDialog({
+          defaultUri: vscode.Uri.file(currentRootFolder),
+          canSelectFiles: false,
+          canSelectFolders: true,
+          canSelectMany: false,
+          title: "Choose locales folder",
+          openLabel: "Set as locales folder",
+        })
+        .then((folderUris) => {
+          if (folderUris && folderUris.length > 0) {
+            const selectedFileUri = folderUris[0];
+            const localesConfig =
+              vscode.workspace.getConfiguration("i18n-goto");
+
+            localesConfig.update(
+              "localesFile",
+              selectedFileUri.fsPath,
+              vscode.ConfigurationTarget.WorkspaceFolder
+            );
+
+            vscode.window.showInformationMessage(
+              `Locales folder configured as: \n ${selectedFileUri?.fsPath}`,
+              "Dismiss"
+            );
+          }
+        });
+
+      
+    }
   );
 
   context.subscriptions.push(disposable);
@@ -25,6 +60,11 @@ function getCurrentRootPath(): string | undefined {
   }
 
   return undefined;
+}
+
+function getLocalesFolder() {
+  // TODO get locales folder from extension settings file
+  throw new Error("not implemented");
 }
 
 export function deactivate() {}
