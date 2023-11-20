@@ -21,9 +21,9 @@
     "configuration": {
       "title": "I18n Goto",
       "properties": {
-        "i18n-goto.localesFile": {
+        "i18n-goto.localesFolder": {
           "type": "string",
-          "default": "src/locales",
+          "default": "undefined",
           "description": "Path to locales Folder"
         }
       }
