@@ -4,7 +4,7 @@ export const appConfig = {
 
 
 export const setLocalesFolderConfig = {
-  command: `${appConfig.appName}.configLocalesFolder`,
+  command: `commands.configLocalesFolder`,
   sectionName: "localesFolder",
   successMessage: (path: string) => `Locales folder configured as:\n${path}`,
   DismissButtonLabel: "Dismiss",

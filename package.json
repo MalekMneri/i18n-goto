@@ -9,13 +9,20 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:typescript"
+  ],
   "main": "./dist/extension.js",
+  
   "contributes": {
     "commands": [
       {
-        "command": "i18n-goto.configLocalesFolder",
+        "command": "commands.configLocalesFolder",
         "title": "Configure locales folder"
+      },
+      {
+        "command": "editor.test",
+        "title": "Test"
       }
     ],
     "configuration": {
@@ -25,6 +32,11 @@
           "type": "string",
           "default": "undefined",
           "description": "Path to locales Folder"
+        },
+        "i18n-goto.regex": {
+          "type": "string",
+          "default": "/(?<=t(['\"])([^'\"]+)(?=['\"])/",
+          "description": "regex to find strings"
         }
       }
     }
