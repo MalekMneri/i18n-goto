@@ -3,13 +3,18 @@
   "displayName": "I18n Goto",
   "description": "go to translated field in the locales files by ctrl+clicking the label path ",
   "version": "0.1.0",
-  "publisher": "MalekMneri",
+  "license": "MIT",
+  "publisher": "ColdHands",
   "engines": {
     "vscode": "^1.84.0"
   },
   "categories": [
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:MalekMneri/i18n-goto.git"
+  },
   "activationEvents": [
     "onLanguage:typescript",
     "onLanguage:javascript",
@@ -17,18 +22,6 @@
     "onLanguage:javascriptreact"
   ],
   "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "commands.configLocalesFolder",
-        "title": "Configure locales folder"
-      }
-    ],
-    "configuration": {
-      "title": "I18n Goto",
-      "properties": {}
-    }
-  },
   "scripts": {
     "vscode:prepublish": "pnpm run package",
     "compile": "webpack",
