@@ -1,33 +1,19 @@
 import * as vscode from "vscode";
-import {
-  appConfig,
-  setLocalesFolderConfig,
-} from "./constants/general.constants";
-import { handleConfigureLocalesFolder } from "./commands/configure-locales-folder.command";
+import LinkProvider from "./providers/link.provider";
 
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand(
-    setLocalesFolderConfig.command,
-    () => handleConfigureLocalesFolder()
+  let link = vscode.languages.registerDocumentLinkProvider(
+    [
+      { scheme: "file", language: "typescript" },
+      { scheme: "file", language: "javascript" },
+      { scheme: "file", language: "typescriptreact" },
+      { scheme: "file", language: "javascriptreact" },
+    ],
+    new LinkProvider()
   );
 
-  let disposableTwo = vscode.window.onDidChangeTextEditorSelection(
-    (event) => {
-      const editor = vscode.window.activeTextEditor;
-
-      console.log('aaaaaaaaaaaa',editor);
-    }
-  );
-
-  context.subscriptions.push(disposable, disposableTwo);
+  context.subscriptions.push(link);
 }
 
 // This method is called when your extension is deactivated
-
-function openFile(filePath: string) {
-  vscode.workspace.openTextDocument(filePath).then((document) => {
-    vscode.window.showTextDocument(document);
-  });
-}
-
 export function deactivate() {}

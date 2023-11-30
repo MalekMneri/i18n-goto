@@ -2,7 +2,8 @@
   "name": "i18n-goto",
   "displayName": "I18n Goto",
   "description": "go to translated field in the locales files by ctrl+clicking the label path ",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "publisher": "MalekMneri",
   "engines": {
     "vscode": "^1.84.0"
   },
@@ -10,35 +11,22 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:typescript"
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:typescriptreact",
+    "onLanguage:javascriptreact"
   ],
   "main": "./dist/extension.js",
-  
   "contributes": {
     "commands": [
       {
         "command": "commands.configLocalesFolder",
         "title": "Configure locales folder"
-      },
-      {
-        "command": "editor.test",
-        "title": "Test"
       }
     ],
     "configuration": {
       "title": "I18n Goto",
-      "properties": {
-        "i18n-goto.localesFolder": {
-          "type": "string",
-          "default": "undefined",
-          "description": "Path to locales Folder"
-        },
-        "i18n-goto.regex": {
-          "type": "string",
-          "default": "/(?<=t(['\"])([^'\"]+)(?=['\"])/",
-          "description": "regex to find strings"
-        }
-      }
+      "properties": {}
     }
   },
   "scripts": {
