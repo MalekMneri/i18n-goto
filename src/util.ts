@@ -1,37 +1,35 @@
 import { workspace, TextDocument, Uri } from "vscode";
 import * as fs from "fs";
 import * as path from "path";
+import { linePath } from "./providers/link.provider";
 
-export function getFilePath(text: string, document: TextDocument) {
-  let paths = getFilePaths(text, document);
-  return paths.length > 0 ? paths[0] : null;
-}
-
-export function getFilePaths(text: string, document: TextDocument) {
+export function getFilePath(
+  text: string,
+  document: TextDocument
+): linePath | undefined {
   let workspaceFolder =
     workspace.getWorkspaceFolder(document.uri)?.uri.fsPath || "";
   let paths = scanLocalesPaths(workspaceFolder);
 
-  let result = [];
+  const attributeArray = text.split(".");
+  const fileName = attributeArray.shift()!;
 
   for (let item of paths) {
-    let tsFilePath = path.join(item, `${text}.ts`);
-    let jsFilePath = path.join(item, `${text}.js`);
+    let tsFilePath = path.join(item, `${fileName}.ts`);
+    let jsFilePath = path.join(item, `${fileName}.js`);
 
     if (fs.existsSync(tsFilePath)) {
-      result.push({
-        name: item,
-        fileUri: Uri.file(tsFilePath),
-      });
-    }else if (fs.existsSync(jsFilePath)) {
-      result.push({
-        name: item,
-        fileUri: Uri.file(jsFilePath),
-      });
+      return {
+        Uri: Uri.file(tsFilePath),
+        attributeArray,
+      };
+    } else if (fs.existsSync(jsFilePath)) {
+      return {
+        Uri: Uri.file(jsFilePath),
+        attributeArray,
+      };
     }
   }
-
-  return result;
 }
 
 function scanLocalesPaths(workspaceFolder: string) {
