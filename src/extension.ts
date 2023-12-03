@@ -6,29 +6,39 @@ import {
   Range,
   languages,
   ExtensionContext,
+  Uri,
 } from "vscode";
-import LinkProvider, { linePath } from "./providers/link.provider";
+import LinkProvider, {
+  LocalesSearchParameters,
+} from "./providers/link.provider";
 import { appConfig } from "./constants/general.constants";
 import { getLineOfAttribute } from "./parsers/typescript.parser";
 
 export function activate(context: ExtensionContext) {
   const gotoCommand = commands.registerCommand(
     appConfig.goToLineCommand.name,
-    (params: linePath) => {
-      if (params && params.attributeArray) {
-        const lineNumber = getLineOfAttribute(
-          params.Uri,
-          params.attributeArray.join(".")
-        );
+    (params: LocalesSearchParameters) => {
+      if (params && params.attributeName && params.Uris.length > 0) {
+        let lineNumber: number | undefined;
+        let attributeUri: Uri | undefined;
+        for (const uri of params.Uris) {
+          lineNumber = getLineOfAttribute(uri, params.attributeName);
+          if (lineNumber) {
+            attributeUri = uri;
+            break;
+          }
+        }
 
-        // TODO go over each folder in locales
-
-        if (lineNumber === undefined) {
-          // TODO show info dialog
+        if (lineNumber === undefined || attributeUri === undefined) {
+          window.showInformationMessage(
+            "This label does not exist in your locales files!",
+            "Dismiss"
+          );
           return;
         }
+
         const range = new Range(lineNumber - 1, 0, lineNumber, 0);
-        window.showTextDocument(params.Uri).then((editor) => {
+        window.showTextDocument(attributeUri).then((editor) => {
           editor.revealRange(range, TextEditorRevealType.InCenter);
           editor.selection = new Selection(range.start, range.start);
         });

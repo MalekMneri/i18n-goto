@@ -11,9 +11,9 @@ import {
 import * as util from "../util";
 import { appConfig } from "../constants/general.constants";
 
-export interface linePath {
-  Uri: Uri;
-  attributeArray: string[];
+export interface LocalesSearchParameters {
+  Uris: Uri[];
+  attributeName: string;
 }
 
 export default class LinkProvider implements vsDocumentLinkProvider {

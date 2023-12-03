@@ -1,35 +1,35 @@
 import { workspace, TextDocument, Uri } from "vscode";
 import * as fs from "fs";
 import * as path from "path";
-import { linePath } from "./providers/link.provider";
+import { LocalesSearchParameters } from "./providers/link.provider";
 
 export function getFilePath(
   text: string,
   document: TextDocument
-): linePath | undefined {
+): LocalesSearchParameters | undefined {
   let workspaceFolder =
     workspace.getWorkspaceFolder(document.uri)?.uri.fsPath || "";
   let paths = scanLocalesPaths(workspaceFolder);
 
   const attributeArray = text.split(".");
   const fileName = attributeArray.shift()!;
+  const uris: Uri[] = [];
 
   for (let item of paths) {
     let tsFilePath = path.join(item, `${fileName}.ts`);
     let jsFilePath = path.join(item, `${fileName}.js`);
 
     if (fs.existsSync(tsFilePath)) {
-      return {
-        Uri: Uri.file(tsFilePath),
-        attributeArray,
-      };
+      uris.push(Uri.file(tsFilePath));
     } else if (fs.existsSync(jsFilePath)) {
-      return {
-        Uri: Uri.file(jsFilePath),
-        attributeArray,
-      };
+      uris.push(Uri.file(jsFilePath));
     }
   }
+
+  return {
+    Uris: uris,
+    attributeName: attributeArray.join("."),
+  };
 }
 
 function scanLocalesPaths(workspaceFolder: string) {
