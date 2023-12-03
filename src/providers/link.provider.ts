@@ -6,39 +6,42 @@ import {
   Position,
   Range,
   workspace,
+  Uri,
 } from "vscode";
 import * as util from "../util";
 import { appConfig } from "../constants/general.constants";
+
+export interface LocalesSearchParameters {
+  Uris: Uri[];
+  attributeName: string;
+}
 
 export default class LinkProvider implements vsDocumentLinkProvider {
   public provideDocumentLinks(
     doc: TextDocument
   ): ProviderResult<DocumentLink[]> {
     let documentLinks = [];
-
-    let linesCount = doc.lineCount;
     let index = 0;
 
-    while (index < linesCount) {
+    while (index < doc.lineCount) {
       let line = doc.lineAt(index);
       let result = line.text.match(appConfig.regex);
 
       if (result !== null) {
         for (let item of result) {
-          const pathArray = item.split(".");
-          const fileName = pathArray.shift()!;
-          // TODO use remaining items in pathArray to go to exact line
+          let linePath = util.getFilePath(item, doc);
 
-          let file = util.getFilePath(fileName, doc);
-
-          if (file !== null) {
+          if (linePath !== undefined) {
             let start = new Position(line.lineNumber, line.text.indexOf(item));
             let end = start.translate(0, item.length);
             let documentLink = new DocumentLink(
               new Range(start, end),
-              file.fileUri
+              Uri.parse(
+                `command:${appConfig.goToLineCommand.name}?${encodeURIComponent(
+                  JSON.stringify(linePath)
+                )}`
+              )
             );
-
             documentLink.tooltip = appConfig.tooltipText;
             documentLinks.push(documentLink);
           }
