@@ -1,51 +1,42 @@
 import {
   isVariableStatement,
   forEachChild,
-  isIdentifier,
   SyntaxKind,
   SourceFile,
   Node,
   createSourceFile,
   ScriptTarget,
-  VariableStatement,
 } from "typescript";
 import { readFileSync } from "fs";
 import { Uri } from "vscode";
 
-function findAttributeLine(sourceFile: SourceFile, attributeName: string) {
+function findAttributeLine(
+  sourceFile: SourceFile,
+  attributeName: string
+): number | undefined {
   let line;
 
-  const visit = (node: Node) => {
+  forEachChild(sourceFile, (node) => {
     if (
       isVariableStatement(node) &&
       node.modifiers &&
       node.modifiers.some(
-        // check if the locales file is exporting an object
         (modifier) => modifier.kind === SyntaxKind.ExportKeyword
       )
     ) {
-      node.declarationList.declarations.forEach((declaration) => {
-        declaration.forEachChild((child) => {
-          if (child.kind === SyntaxKind.ObjectLiteralExpression) {
-          }
-        });
+      const result = findPropertyNode(node, attributeName.split("."), 0);
 
-        const result = recursive(declaration, attributeName.split("."), 0);
-        console.log(result);
-        if (result !== undefined) {
-          line = sourceFile.getLineAndCharacterOfPosition(result.getStart()).line + 1;
-        }
-      });
+      if (result !== undefined) {
+        line =
+          sourceFile.getLineAndCharacterOfPosition(result.getStart()).line + 1;
+      }
     }
-    forEachChild(node, visit);
-  };
-
-  visit(sourceFile);
+  });
 
   return line;
 }
 
-function recursive(
+function findPropertyNode(
   node: Node,
   attributeName: string[],
   index: number
@@ -62,7 +53,7 @@ function recursive(
   let result: Node | undefined;
 
   node.forEachChild((c) => {
-    const childResult = recursive(c, attributeName, index);
+    const childResult = findPropertyNode(c, attributeName, index);
     if (childResult) {
       result = childResult;
     }
