@@ -11,33 +11,21 @@ import {
 import LinkProvider, {
   LocalesSearchParameters,
 } from "./providers/link.provider";
-import { appConfig } from "./constants/general.constants";
+import { appConfig, selectors } from "./constants/general.constants";
 import { getLineOfAttribute } from "./parsers/typescript.parser";
+import { showTextDialog } from "./util";
 
 export function activate(context: ExtensionContext) {
   const gotoCommand = commands.registerCommand(
     appConfig.goToLineCommand.name,
     (params: LocalesSearchParameters) => {
       if (params && params.attributeName && params.Uris.length > 0) {
-        let lineNumber: number | undefined;
-        let attributeUri: Uri | undefined;
-        for (const uri of params.Uris) {
-          lineNumber = getLineOfAttribute(uri, params.attributeName);
-          if (lineNumber) {
-            attributeUri = uri;
-            break;
-          }
-        }
-
-        if (lineNumber === undefined || attributeUri === undefined) {
-          window.showInformationMessage(
-            "This label does not exist in your locales files!",
-            "Dismiss"
-          );
+        const result = findLabelsUriAndRange(params.Uris, params.attributeName);
+        if (result.error) {
           return;
         }
+        const { range, attributeUri } = result;
 
-        const range = new Range(lineNumber - 1, 0, lineNumber, 0);
         window.showTextDocument(attributeUri).then((editor) => {
           editor.revealRange(range, TextEditorRevealType.InCenter);
           editor.selection = new Selection(range.start, range.start);
@@ -47,16 +35,37 @@ export function activate(context: ExtensionContext) {
   );
 
   const link = languages.registerDocumentLinkProvider(
-    [
-      { scheme: "file", language: "typescript" },
-      { scheme: "file", language: "javascript" },
-      { scheme: "file", language: "typescriptreact" },
-      { scheme: "file", language: "javascriptreact" },
-    ],
+    selectors,
     new LinkProvider()
   );
 
   context.subscriptions.push(gotoCommand, link);
+}
+
+function findLabelsUriAndRange(
+  uris: Uri[],
+  attributeName: string
+):
+  | { range: Range; attributeUri: Uri; error: false }
+  | { error: true } {
+  let lineNumber: number | undefined;
+  let attributeUri: Uri | undefined;
+  for (const uri of uris) {
+    lineNumber = getLineOfAttribute(uri, attributeName);
+    if (lineNumber) {
+      attributeUri = uri;
+      break;
+    }
+  }
+  if (lineNumber === undefined || attributeUri === undefined) {
+    showTextDialog(appConfig.errors.notFound);
+
+    return { error: true };
+  }
+
+  const range = new Range(lineNumber - 1, 0, lineNumber, 0);
+
+  return { range, attributeUri, error: false };
 }
 
 // This method is called when your extension is deactivated
