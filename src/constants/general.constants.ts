@@ -5,4 +5,8 @@ export const appConfig = {
   goToLineCommand: {
     name: "i18n-goto.openLine",
   },
+  errors: {
+    notFound: "This label does not exist in your locales files!",
+    invalidRegex: "Invalid custom regex:",
+  },
 };

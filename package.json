@@ -21,7 +21,17 @@
         "title": "Go to file in a specific line",
         "command": "i18n-goto.openFileToLine"
       }
-    ]
+    ], 
+    "configuration": {
+      "title": "I18n Goto",
+      "properties": {
+        "i18n-goto.regex": {
+          "type": "string",
+          "default": "(?<=t\\(\\')([^'\\\"]+)(?=['\\\"])",
+          "description": "Regex to find i18n references"
+        } 
+      }
+    }
   },
   "activationEvents": [
     "onLanguage:typescript",

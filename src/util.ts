@@ -1,4 +1,4 @@
-import { workspace, TextDocument, Uri } from "vscode";
+import { workspace, TextDocument, Uri, window } from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import { LocalesSearchParameters } from "./providers/link.provider";
@@ -46,4 +46,11 @@ function scanLocalesPaths(workspaceFolder: string) {
   }
 
   return folders;
+}
+
+export function showTextDialog(text: string){
+  window.showInformationMessage(
+    text,
+    "Dismiss"
+  );
 }
