@@ -26,6 +26,8 @@ Custom regex for matching strings.
 - Goes to the specific line of the label.
 - Code refactor / bug fixes.
 
+---
+
 ### 0.3.0
 
 - Goes to the specific line of the label.
