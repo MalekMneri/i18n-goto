@@ -12,7 +12,7 @@ import LinkProvider, {
   LocalesSearchParameters,
 } from "./providers/link.provider";
 import { appConfig, selectors } from "./constants/general.constants";
-import { getLineOfAttribute } from "./parsers/typescript.parser";
+import { getLineOfAttribute } from "./typescriptAttributeLocator";
 import { showTextDialog } from "./util";
 
 export function activate(context: ExtensionContext) {
