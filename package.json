@@ -2,7 +2,7 @@
   "name": "i18n-goto",
   "displayName": "I18n Goto",
   "description": "go to translated field in the locales files by ctrl+clicking the label path ",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "publisher": "ColdHands",
   "engines": {
@@ -21,7 +21,17 @@
         "title": "Go to file in a specific line",
         "command": "i18n-goto.openFileToLine"
       }
-    ]
+    ], 
+    "configuration": {
+      "title": "I18n Goto",
+      "properties": {
+        "i18n-goto.regex": {
+          "type": "string",
+          "default": "(?<=t\\(\\')([^'\\\"]+)(?=['\\\"])",
+          "description": "Regex to find i18n references"
+        } 
+      }
+    }
   },
   "activationEvents": [
     "onLanguage:typescript",
