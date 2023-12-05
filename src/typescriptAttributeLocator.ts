@@ -64,7 +64,7 @@ function findPropertyNode(
 }
 
 export function getLineOfAttribute(fileUri: Uri, attributeName: string) {
-  const sourceCode = readFileSync(fileUri.path, "utf-8");
+  const sourceCode = readFileSync(fileUri.fsPath, "utf-8");
   const sourceFile = createSourceFile(
     fileUri.path,
     sourceCode,
