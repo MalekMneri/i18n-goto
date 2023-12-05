@@ -22,6 +22,8 @@ export function activate(context: ExtensionContext) {
       if (params && params.attributeName && params.Uris.length > 0) {
         const result = findLabelsUriAndRange(params.Uris, params.attributeName);
         if (result.error) {
+          showTextDialog(appConfig.errors.notFound);
+          
           return;
         }
         const { range, attributeUri } = result;
@@ -58,8 +60,6 @@ function findLabelsUriAndRange(
     }
   }
   if (lineNumber === undefined || attributeUri === undefined) {
-    showTextDialog(appConfig.errors.notFound);
-
     return { error: true };
   }
 

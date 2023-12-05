@@ -7,6 +7,7 @@ export function getFilePath(
   text: string,
   document: TextDocument
 ): LocalesSearchParameters | undefined {
+  // TODO check if this works the same on windows 
   let workspaceFolder =
     workspace.getWorkspaceFolder(document.uri)?.uri.fsPath || "";
   let paths = scanLocalesPaths(workspaceFolder);
