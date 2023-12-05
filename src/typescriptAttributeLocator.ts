@@ -41,12 +41,13 @@ function findPropertyNode(
   attributeName: string[],
   index: number
 ): Node | undefined {
-  if (node.kind === SyntaxKind.PropertyAssignment) {
-    if (attributeName[index] === node.getChildAt(0).getText().split(" ")[0]) {
-      index++;
-      if (attributeName.length === index) {
-        return node;
-      }
+  if (
+    node.kind === SyntaxKind.PropertyAssignment &&
+    attributeName[index] === node.getChildAt(0).getText()
+  ) {
+    index++;
+    if (attributeName.length === index) {
+      return node;
     }
   }
 
