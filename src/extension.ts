@@ -23,6 +23,7 @@ export function activate(context: ExtensionContext) {
         const result = findLabelsUriAndRange(params.Uris, params.attributeName);
         if (result.error) {
           showTextDialog(appConfig.errors.notFound);
+          
           return;
         }
         const { range, attributeUri } = result;
