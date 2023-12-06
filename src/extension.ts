@@ -12,7 +12,7 @@ import LinkProvider, {
   LocalesSearchParameters,
 } from "./providers/link.provider";
 import { appConfig, selectors } from "./constants/general.constants";
-import { getLineOfAttribute } from "./typescriptAttributeLocator";
+import { getRangeOfAttribute } from "./typescriptAttributeLocator";
 import { showTextDialog } from "./util";
 
 export function activate(context: ExtensionContext) {
@@ -30,7 +30,7 @@ export function activate(context: ExtensionContext) {
 
         window.showTextDocument(attributeUri).then((editor) => {
           editor.revealRange(range, TextEditorRevealType.InCenter);
-          editor.selection = new Selection(range.start, range.start);
+          editor.selection = new Selection(range.start, range.end);
         });
       }
     }
@@ -50,20 +50,18 @@ function findLabelsUriAndRange(
 ):
   | { range: Range; attributeUri: Uri; error: false }
   | { error: true } {
-  let lineNumber: number | undefined;
+  let range: Range | undefined;
   let attributeUri: Uri | undefined;
   for (const uri of uris) {
-    lineNumber = getLineOfAttribute(uri, attributeName);
-    if (lineNumber) {
+    range = getRangeOfAttribute(uri, attributeName);
+    if (range) {
       attributeUri = uri;
       break;
     }
   }
-  if (lineNumber === undefined || attributeUri === undefined) {
+  if (range === undefined || attributeUri === undefined) {
     return { error: true };
   }
-
-  const range = new Range(lineNumber - 1, 0, lineNumber, 0);
 
   return { range, attributeUri, error: false };
 }

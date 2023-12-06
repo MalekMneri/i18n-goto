@@ -8,13 +8,13 @@ import {
   ScriptTarget,
 } from "typescript";
 import { readFileSync } from "fs";
-import { Uri } from "vscode";
+import { Uri, Range, Position } from "vscode";
 
-function findAttributeLine(
+function findAttributeRange(
   sourceFile: SourceFile,
   attributeName: string
-): number | undefined {
-  let line;
+): Range | undefined {
+  let range: Range | undefined;
 
   forEachChild(sourceFile, (node) => {
     if (
@@ -27,13 +27,19 @@ function findAttributeLine(
       const result = findPropertyNode(node, attributeName.split("."), 0);
 
       if (result !== undefined) {
-        line =
-          sourceFile.getLineAndCharacterOfPosition(result.getStart()).line + 1;
+        const start = sourceFile.getLineAndCharacterOfPosition(
+          result.getStart()
+        );
+        const end = sourceFile.getLineAndCharacterOfPosition(result.getEnd());
+        range = new Range(
+          new Position(start.line, start.character),
+          new Position(end.line, end.character)
+        );
       }
     }
   });
 
-  return line;
+  return range;
 }
 
 function findPropertyNode(
@@ -63,7 +69,7 @@ function findPropertyNode(
   return result;
 }
 
-export function getLineOfAttribute(fileUri: Uri, attributeName: string) {
+export function getRangeOfAttribute(fileUri: Uri, attributeName: string) {
   const sourceCode = readFileSync(fileUri.fsPath, "utf-8");
   const sourceFile = createSourceFile(
     fileUri.path,
@@ -72,5 +78,5 @@ export function getLineOfAttribute(fileUri: Uri, attributeName: string) {
     true
   );
 
-  return findAttributeLine(sourceFile, attributeName);
+  return findAttributeRange(sourceFile, attributeName);
 }
