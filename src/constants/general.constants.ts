@@ -4,8 +4,8 @@ export const appConfig = {
   appName: "i18n-goto",
   tooltipText: "go to locales file",
   regex: /(?<=t\(\')([^'"]+)(?=['"])/g,
-  goToLineCommand: {
-    name: "i18n-goto.openLine",
+  revealAttributeCommand: {
+    name: "i18n-goto.revealAttribute",
   },
   errors: {
     notFound: "This label does not exist in your locales files!",

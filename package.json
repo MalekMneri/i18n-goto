@@ -2,7 +2,7 @@
   "name": "i18n-goto",
   "displayName": "I18n Goto",
   "description": "go to translated field in the locales files by ctrl+clicking the label path ",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "publisher": "ColdHands",
   "engines": {
@@ -16,12 +16,6 @@
     "url": "https://github.com/MalekMneri/i18n-goto.git"
   },
   "contributes": {
-    "commands": [
-      {
-        "title": "Go to file in a specific line",
-        "command": "i18n-goto.openFileToLine"
-      }
-    ],
     "configuration": {
       "title": "I18n Goto",
       "properties": {

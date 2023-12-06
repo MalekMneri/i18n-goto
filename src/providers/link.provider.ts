@@ -48,9 +48,9 @@ export default class LinkProvider implements vsDocumentLinkProvider {
             let documentLink = new DocumentLink(
               new Range(start, end),
               Uri.parse(
-                `command:${appConfig.goToLineCommand.name}?${encodeURIComponent(
-                  JSON.stringify(linePath)
-                )}`
+                `command:${
+                  appConfig.revealAttributeCommand.name
+                }?${encodeURIComponent(JSON.stringify(linePath))}`
               )
             );
             documentLink.tooltip = appConfig.tooltipText;
