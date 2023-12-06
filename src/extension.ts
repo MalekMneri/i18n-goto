@@ -16,14 +16,14 @@ import { getRangeOfAttribute } from "./typescriptAttributeLocator";
 import { showTextDialog } from "./util";
 
 export function activate(context: ExtensionContext) {
-  const gotoCommand = commands.registerCommand(
-    appConfig.goToLineCommand.name,
+  const revealAttributeCommand = commands.registerCommand(
+    appConfig.revealAttributeCommand.name,
     (params: LocalesSearchParameters) => {
       if (params && params.attributeName && params.Uris.length > 0) {
         const result = findLabelsUriAndRange(params.Uris, params.attributeName);
         if (result.error) {
           showTextDialog(appConfig.errors.notFound);
-          
+
           return;
         }
         const { range, attributeUri } = result;
@@ -41,7 +41,7 @@ export function activate(context: ExtensionContext) {
     new LinkProvider()
   );
 
-  context.subscriptions.push(gotoCommand, link);
+  context.subscriptions.push(revealAttributeCommand, link);
 }
 
 function findLabelsUriAndRange(
