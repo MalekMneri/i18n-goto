@@ -27,7 +27,7 @@ export default class LinkProvider implements vsDocumentLinkProvider {
       regex = new RegExp(config.regex, "g");
     } catch (error) {
       utils.showTextDialog(`${appConfig.errors.invalidRegex}\n${error}`);
-      
+
       regex = appConfig.regex;
     }
 
@@ -39,11 +39,16 @@ export default class LinkProvider implements vsDocumentLinkProvider {
       let result = line.text.match(regex);
 
       if (result !== null) {
+        let position = 0;
         for (let item of result) {
           let linePath = utils.getFilePath(item, doc);
 
           if (linePath !== undefined) {
-            let start = new Position(line.lineNumber, line.text.indexOf(item));
+            position = line.text.indexOf(item, position);
+            let start = new Position(
+              line.lineNumber,
+              position
+            );
             let end = start.translate(0, item.length);
             let documentLink = new DocumentLink(
               new Range(start, end),
