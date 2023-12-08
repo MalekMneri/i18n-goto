@@ -21,7 +21,7 @@
       "properties": {
         "i18n-goto.regex": {
           "type": "string",
-          "default": "(?<=(\\bt|translate)\\(['\\\"])([^'\\\"]+)(?=['\\\"])",
+          "default": "(?<=\\bt\\()([\\\"][^\\\"]+[\\\"]|['][^']+['])",
           "description": "Regex to find i18n references"
         }
       }

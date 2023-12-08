@@ -45,11 +45,8 @@ export default class LinkProvider implements vsDocumentLinkProvider {
 
           if (linePath !== undefined) {
             position = line.text.indexOf(item, position);
-            let start = new Position(
-              line.lineNumber,
-              position
-            );
-            let end = start.translate(0, item.length);
+            let start = new Position(line.lineNumber, position + 1);
+            let end = start.translate(0, item.length - 2);
             let documentLink = new DocumentLink(
               new Range(start, end),
               Uri.parse(
