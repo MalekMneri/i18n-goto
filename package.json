@@ -2,7 +2,7 @@
   "name": "i18n-goto",
   "displayName": "I18n Goto",
   "description": "go to translated field in the locales files by ctrl+clicking the label path ",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "license": "MIT",
   "publisher": "ColdHands",
   "engines": {
