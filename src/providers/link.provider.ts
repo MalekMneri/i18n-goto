@@ -40,7 +40,7 @@ export default class LinkProvider implements vsDocumentLinkProvider {
 
       if (result !== null) {
         for (let item of result) {
-          let linePath = utils.getFilePath(item, doc);
+          let linePath = utils.getFilePath(item.replaceAll(/[',"]/g, ''), doc);
 
           if (linePath !== undefined) {
             let start = new Position(line.lineNumber, line.text.indexOf(item));
