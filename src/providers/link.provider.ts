@@ -7,9 +7,9 @@ import {
   Range,
   workspace,
   Uri,
-} from "vscode";
-import * as utils from "../util";
-import { appConfig } from "../constants/general.constants";
+} from 'vscode';
+import { showTextDialog, getFilePath } from '../utils';
+import { appConfig } from '../constants/general.constants';
 
 export interface LocalesSearchParameters {
   Uris: Uri[];
@@ -17,6 +17,7 @@ export interface LocalesSearchParameters {
 }
 
 export default class LinkProvider implements vsDocumentLinkProvider {
+// TODO make this check all strings that have . i.e. 'common.add' and only create the link if it exists in the locales files
   public provideDocumentLinks(
     doc: TextDocument
   ): ProviderResult<DocumentLink[]> {
@@ -24,10 +25,10 @@ export default class LinkProvider implements vsDocumentLinkProvider {
     let regex: RegExp;
 
     try {
-      regex = new RegExp(config.regex, "g");
+      regex = new RegExp(config.regex, 'g');
     } catch (error) {
-      utils.showTextDialog(`${appConfig.errors.invalidRegex}\n${error}`);
-      
+      showTextDialog(`${appConfig.errors.invalidRegex}\n${error}`);
+
       regex = appConfig.regex;
     }
 
@@ -40,7 +41,7 @@ export default class LinkProvider implements vsDocumentLinkProvider {
 
       if (result !== null) {
         for (let item of result) {
-          let linePath = utils.getFilePath(item.replaceAll(/[',"]/g, ''), doc);
+          let linePath = getFilePath(item.replaceAll(/[',"]/g, ''), doc);
 
           if (linePath !== undefined) {
             let start = new Position(line.lineNumber, line.text.indexOf(item));

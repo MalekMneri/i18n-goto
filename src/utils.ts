@@ -1,17 +1,17 @@
-import { workspace, TextDocument, Uri, window } from "vscode";
-import * as fs from "fs";
-import * as path from "path";
-import { LocalesSearchParameters } from "./providers/link.provider";
+import { workspace, TextDocument, Uri, window } from 'vscode';
+import { existsSync, readdirSync, statSync } from 'fs';
+import * as path from 'path';
+import { LocalesSearchParameters } from './providers/link.provider';
 
 export function getFilePath(
   text: string,
   document: TextDocument
 ): LocalesSearchParameters | undefined {
   let workspaceFolder =
-    workspace.getWorkspaceFolder(document.uri)?.uri.fsPath || "";
+    workspace.getWorkspaceFolder(document.uri)?.uri.fsPath || '';
   let paths = scanLocalesPaths(workspaceFolder);
 
-  const attributeArray = text.split(".");
+  const attributeArray = text.split('.');
   const fileName = attributeArray.shift()!;
   const uris: Uri[] = [];
 
@@ -19,27 +19,27 @@ export function getFilePath(
     let tsFilePath = path.join(item, `${fileName}.ts`);
     let jsFilePath = path.join(item, `${fileName}.js`);
 
-    if (fs.existsSync(tsFilePath)) {
+    if (existsSync(tsFilePath)) {
       uris.push(Uri.file(tsFilePath));
-    } else if (fs.existsSync(jsFilePath)) {
+    } else if (existsSync(jsFilePath)) {
       uris.push(Uri.file(jsFilePath));
     }
   }
 
   return {
     Uris: uris,
-    attributeName: attributeArray.join("."),
+    attributeName: attributeArray.join('.'),
   };
 }
 
 function scanLocalesPaths(workspaceFolder: string) {
   let folders: string[] = [];
 
-  let modulePath = path.join(workspaceFolder, "src/locales");
-  if (fs.existsSync(modulePath)) {
-    fs.readdirSync(modulePath).forEach((element) => {
+  let modulePath = path.join(workspaceFolder, 'src/locales');
+  if (existsSync(modulePath)) {
+    readdirSync(modulePath).forEach((element) => {
       let file = path.join(modulePath, element);
-      if (fs.statSync(file).isDirectory()) {
+      if (statSync(file).isDirectory()) {
         folders.push(path.join(modulePath, element));
       }
     });
@@ -48,9 +48,6 @@ function scanLocalesPaths(workspaceFolder: string) {
   return folders;
 }
 
-export function showTextDialog(text: string){
-  window.showInformationMessage(
-    text,
-    "Dismiss"
-  );
+export function showTextDialog(text: string) {
+  window.showInformationMessage(text, 'Dismiss');
 }

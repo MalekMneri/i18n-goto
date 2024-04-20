@@ -6,9 +6,9 @@ import {
   Node,
   createSourceFile,
   ScriptTarget,
-} from "typescript";
-import { readFileSync } from "fs";
-import { Uri, Range, Position } from "vscode";
+} from 'typescript';
+import { readFileSync } from 'fs';
+import { Uri, Range, Position } from 'vscode';
 
 function findAttributeRange(
   sourceFile: SourceFile,
@@ -24,7 +24,7 @@ function findAttributeRange(
         (modifier) => modifier.kind === SyntaxKind.ExportKeyword
       )
     ) {
-      const result = findPropertyNode(node, attributeName.split("."), 0);
+      const result = findPropertyNode(node, attributeName.split('.'), 0);
 
       if (result !== undefined) {
         const start = sourceFile.getLineAndCharacterOfPosition(
@@ -69,8 +69,9 @@ function findPropertyNode(
   return result;
 }
 
+// TODO make this function accept an array of uri and return the uri and range of the found attribute or null
 export function getRangeOfAttribute(fileUri: Uri, attributeName: string) {
-  const sourceCode = readFileSync(fileUri.fsPath, "utf-8");
+  const sourceCode = readFileSync(fileUri.fsPath, 'utf-8');
   const sourceFile = createSourceFile(
     fileUri.path,
     sourceCode,
