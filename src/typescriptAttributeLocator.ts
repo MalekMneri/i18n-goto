@@ -1,6 +1,5 @@
 import {
   isVariableStatement,
-  forEachChild,
   SyntaxKind,
   SourceFile,
   Node,
@@ -16,7 +15,7 @@ function findAttributeRange(
 ): Range | undefined {
   let range: Range | undefined;
 
-  forEachChild(sourceFile, (node) => {
+  sourceFile.forEachChild((node) => {
     if (
       isVariableStatement(node) &&
       node.modifiers &&

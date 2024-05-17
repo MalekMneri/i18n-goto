@@ -1,15 +1,29 @@
-import * as assert from 'assert';
+import * as assert from "assert";
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import * as vscode from 'vscode';
-// import * as myExtension from '../../extension';
+import { getRangeOfAttribute } from "../../typescriptAttributeLocator";
+import { Position, Range, Uri, window } from "vscode";
+import * as path from "path";
 
-suite('Extension Test Suite', () => {
-	vscode.window.showInformationMessage('Start all tests.');
+suite("Extension Test Suite", () => {
+  window.showInformationMessage("Start all tests.");
+  const filePath = path.join(__dirname, "/out/test-files/common.ts");
+  const file = Uri.file(filePath);
+  const range = getRangeOfAttribute(file, "example.label");
+  console.log("range");
+  console.log(range);
 
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
-	});
+  test("main scenario", () => {
+    // const filePath = path.join(__dirname, "/out/test-files/common.ts");
+    const range = getRangeOfAttribute(
+      Uri.file(
+        "file:///home/malek/Desktop/code/i18n-goto/src/test/suite/test-files/common.ts"
+      ),
+      "example.label"
+    );
+    console.log(range);
+
+    const expectedRange = new Range(new Position(1, 2), new Position(1, 2));
+
+    assert.strictEqual(range, expectedRange);
+  });
 });
